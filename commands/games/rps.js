@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { promptMessage } = require("../../functions");
 
 const chooseArr = ["🗻", "📰", "✂"];
@@ -14,10 +14,10 @@ module.exports = {
     },
     run: async (bot, message, args) => {
       try
-      {     const embed = new MessageEmbed()
-            .setColor("GREEN")
-            .setAuthor(message.member.displayName, message.author.displayAvatarURL())
-            .setFooter(message.guild.me.displayName, bot.user.displayAvatarURL())
+      {     const embed = new EmbedBuilder()
+            .setColor("Green")
+            .setAuthor({ name: message.member.displayName, iconURL: message.author.displayAvatarURL() })
+            .setFooter({ text: message.guild.members.me.displayName, iconURL: bot.user.displayAvatarURL() })
             .setDescription("**Play A Game of RPS Against The Bot!\nSelect Reactions To Play!**")
             .setTimestamp();
 
@@ -31,7 +31,7 @@ module.exports = {
 
         embed
             .setDescription("")
-            .addField(`**${result}**`, `${reacted} vs ${botChoice}`);
+            .addFields({ name: `**${result}**`, value: `${reacted} vs ${botChoice}` });
 
         m.edit(embed);
 

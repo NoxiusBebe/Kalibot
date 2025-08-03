@@ -1,6 +1,22 @@
-const { Client, MessageAttachment, Collection, MessageEmbed } = require('discord.js');
+const {
+  Client,
+  AttachmentBuilder,
+  Collection,
+  EmbedBuilder,
+  GatewayIntentBits,
+  Partials
+} = require('discord.js');
 const { PREFIX, TOKEN, DBL_API_KEY } = require('./config');
-const bot = new Client({ disableMentions: 'everyone' });
+const bot = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers
+  ],
+  partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember],
+  allowedMentions: { parse: ['users'] }
+});
 const DBL = require('dblapi.js');
 const dbl = new DBL(DBL_API_KEY)
 const fs = require("fs");
@@ -25,9 +41,9 @@ bot.on('ready', () => {
     }, 1800000);
 });
 
-bot.on('message', async message => {
+bot.on('messageCreate', async message => {
     let prefix;
-    if (message.author.bot || message.channel.type === "dm") return;
+    if (message.author.bot || !message.guild) return;
         try {
             let fetched = await db.fetch(`prefix_${message.guild.id}`);
             if (fetched == null) {
@@ -40,7 +56,7 @@ bot.on('message', async message => {
     };
   
     if (message.author.bot) return;
-    if (message.channel.type === "dm") return;
+    if (!message.guild) return;
 
     let messageFetch = db.fetch(`guildMessages_${message.guild.id}`)
     if (messageFetch === null) return;
@@ -105,15 +121,15 @@ bot.on('message', async message => {
         db.add(`level_${message.guild.id}_${message.author.id}`, 1)
         let levelfetch = db.fetch(`level_${message.guild.id}_${message.author.id}`)
 
-        let levelembed = new MessageEmbed()
-            .setColor('GREEN')
+        let levelembed = new EmbedBuilder()
+            .setColor('Green')
             .setDescription(`**${message.author}, You Have Leveled Up To Level ${levelfetch}**`)
-            .setFooter(`${prefix}disablexp To Disable Level Up Messages`)
+            .setFooter({ text: `${prefix}disablexp To Disable Level Up Messages` })
         message.channel.send(levelembed);
     };
 });
 
-bot.on('message', async message => {
+bot.on('messageCreate', async message => {
     let prefix;
         try {
             let fetched = await db.fetch(`prefix_${message.guild.id}`);
@@ -134,7 +150,7 @@ bot.on('message', async message => {
     };
 });
 
-bot.on('message', async message => {
+bot.on('messageCreate', async message => {
   
     try {
         const hasText = Boolean(message.content);

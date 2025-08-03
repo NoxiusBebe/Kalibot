@@ -7,7 +7,7 @@ const games = new Map()
 
 module.exports = async (bot, message) => {
     try {
-        if (message.author.bot || message.channel.type === "dm") return;
+        if (message.author.bot || !message.guild) return;
 
         let prefix;
         let fetched = await db.fetch(`prefix_${message.guild.id}`);

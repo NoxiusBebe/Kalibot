@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     config: {
@@ -14,9 +14,9 @@ module.exports = {
         let result;
         if (n === 1) result = 'Heads';
         else result = 'Tails';
-        const embed = new MessageEmbed()
-            .setColor("GREEN")
-            .setDescription(`**${message.member.displayName} Flipped ${result}**!`)
+        const embed = new EmbedBuilder()
+            .setColor("Green")
+            .setDescription(`**${message.member.displayName} Flipped ${result}!**`)
         message.channel.send(embed);
     }
 };

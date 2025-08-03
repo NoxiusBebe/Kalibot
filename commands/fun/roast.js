@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const roasts = require('../../JSON/roast.json');
 
 module.exports = {
@@ -17,21 +17,21 @@ module.exports = {
         let roast = roasts.roast[Math.floor((Math.random() * roasts.roast.length))];
 
         if(!args[0]) {
-            const sembed = new MessageEmbed()
-                .setAuthor(message.guild.name, message.guild.iconURL())
-                .setColor("GREEN")
+            const sembed = new EmbedBuilder()
+                .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL() })
+                .setColor("Green")
                 .setDescription("**Do You Really Want To Roast Yourself?**")
-                .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                .setFooter({ text: message.member.displayName, iconURL: message.author.displayAvatarURL() })
                 .setTimestamp()
             message.channel.send(sembed);
         }
         else if (args[0]) {
-            const embed = new MessageEmbed()
-                .setAuthor(message.guild.name, message.guild.iconURL())
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL() })
                 .setTitle(`${message.author.username}-`)
-                .setColor("GREEN")
+                .setColor("Green")
                 .setDescription(`${roast}`)
-                .setFooter(member.displayName, member.user.displayAvatarURL())
+                .setFooter({ text: member.displayName, iconURL: member.user.displayAvatarURL() })
                 .setTimestamp()
             message.channel.send(embed);
         }
